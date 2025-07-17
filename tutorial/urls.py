@@ -1,36 +1,18 @@
-"""
-URL configuration for tutorial project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path, include
-
-# third-party imports
 from rest_framework.routers import DefaultRouter
 
+# 導入三個 ViewSet
+from tutorial.todos.views import TodoViewSet, StudentViewSet, TeacherViewSet
 
-#apps
-from tutorial.todos.views import TodoViewSet
-
-router = DefaultRouter(trailing_slash=False)  # Use trailing_slash=False to avoid double slashes in URLs
-# Register the TodoViewSet with the router
-router.register(r'todos', TodoViewSet, basename='todo') 
+# router 註冊
+router = DefaultRouter(trailing_slash=False)  # 建議統一 trailing_slash
+router.register(r'todos', TodoViewSet, basename='todo')
+router.register(r'students', StudentViewSet, basename='student')
+router.register(r'teachers', TeacherViewSet, basename='teacher')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    # Include the router's URLs
-    path('api/', include(router.urls),),
+    path('api/', include(router.urls)),  # 統一 API 前綴
 ]
